@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,float,hyperref,enumitem,microtype,natbib}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\graphicspath{{artifacts/figures/}}
+\newcommand{\CESP}{\textsc{CESP}}
+\newtheorem{proposition}{Proposition}
+\title{Collective Entropy--Synchronization Phases in Financial Markets\\\large An Independent Econophysics Model for Cross-Asset Risk Allocation}
+\author{Akhilesh Varma\\\small \href{mailto:akhverm@gmail.com}{akhverm@gmail.com}\\\small Research repository: \url{https://github.com/ak495867/CESP}}
+\date{September 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+This paper introduces the Collective Entropy--Synchronization Phase model (CESP), an independent econophysics framework for quantitative portfolio risk allocation. CESP treats a market as a population of interacting assets and represents its state through two collective observables: the entropy of cross-sectional normalized return activity and the synchronization of asset return signs. A phase-pressure statistic rises when activity becomes concentrated, directional movement becomes aligned, and normalized shock amplitude is large. A continuous defensive allocation is then obtained from the lagged historical percentile of the pressure score. The construction uses collective cross-sectional observables and does not rely on pairwise asset fields or signed-mass analogies.
+
+The model is tested with adjusted daily data retrieved from Yahoo Finance through \texttt{yfinance}. The universe contains US equities, international equity, real estate, energy, commodities, Treasuries, a dollar proxy, and crypto assets. The empirical design compares CESP with equal-weighted risky and defensive baskets, static 60/40, a 200-day moving-average mix, volatility targeting, and a random exposure placebo. Over the realized sample, CESP reduces risk-basket drawdown relative to risky buy-and-hold and outperforms the placebo on Sharpe ratio, but it does not dominate the strongest diversified or volatility-targeted benchmark. The result supports CESP as a transparent and falsifiable collective-state hypothesis, not as a universal claim of alpha.
+\end{abstract}
+\noindent\textbf{Keywords:} econophysics; cross-sectional entropy; synchronization; phase transition; portfolio allocation; quantitative finance; volatility clustering.
+
+\section{Introduction}
+Econophysics studies financial markets using concepts developed for interacting-particle systems, complex networks, and nonequilibrium statistical mechanics. Financial return series display heavy tails and volatility clustering, motivating models in which the market state is more than a static distribution of independent Gaussian shocks \citep{gopikrishnan1999,yamasaki2005}. This paper develops an independent construction based on a different primitive from pairwise risk switching: the geometry of collective cross-sectional motion.
+
+The proposed Collective Entropy--Synchronization Phase model, abbreviated CESP, is built around a simple question. Does a market become more fragile when return activity is concentrated in fewer assets and directional signs become more aligned? In a disordered phase, shocks are distributed across the cross-section and the signs of returns are mixed. In an ordered phase, many assets move together and a small subset absorbs a large share of normalized return activity. CESP interprets the second configuration as a collective phase with higher portfolio-level risk.
+
+The contribution is methodological and empirical. Methodologically, CESP provides an interpretable phase-pressure operator with continuous allocation rather than a binary pair regime. Empirically, the paper evaluates whether entropy collapse and synchronization contain information beyond volatility targeting, moving-average timing, and static diversification. The model is intentionally exposed to negative evidence: it is evaluated across multiple asset classes, with transaction costs and a random exposure placebo.
+
+\section{Theory}
+\subsection{Cross-sectional activity entropy}
+Let $r_{i,t}$ denote the log return of asset $i$ at date $t$, with $i=1,\ldots,N$. The model first computes a volatility-normalized return using only information available before date $t$:
+\begin{equation}
+z_{i,t}=\frac{r_{i,t}}{\widehat{\sigma}_{i,t-1}+\varepsilon},
+\end{equation}
+where $\widehat{\sigma}_{i,t-1}$ is an exponentially weighted standard deviation. The absolute normalized return activity share is
+\begin{equation}
+p_{i,t}=\frac{|z_{i,t}|+\varepsilon}{\sum_{j=1}^{N}(|z_{j,t}|+\varepsilon)}.
+\end{equation}
+The normalized activity entropy is
+\begin{equation}
+H_t=-\frac{1}{\log N}\sum_{i=1}^{N}p_{i,t}\log(p_{i,t}), \qquad 0\leq H_t\leq 1.
+\end{equation}
+When $H_t$ is high, normalized return energy is distributed relatively evenly. When it is low, activity is concentrated in a small number of assets. CESP uses this concentration as a collective-order observable rather than as an asset-level volatility penalty.
+
+\subsection{Directional synchronization}
+The cross-sectional sign order parameter is
+\begin{equation}
+m_t=\frac{1}{N}\sum_{i=1}^{N}\tanh(\beta z_{i,t}),
+\end{equation}
+while the pairwise sign synchronization statistic is
+\begin{equation}
+S_t=\frac{2}{N(N-1)}\sum_{i<j}\operatorname{sign}(z_{i,t})\operatorname{sign}(z_{j,t}).
+\end{equation}
+The statistic is high when return signs align and low when the cross-section is mixed. In the implementation, the positive component $\max(S_t,0)$ is used because a strongly synchronized rally and a strongly synchronized selloff are both ordered states, but the allocation rule is designed to respond to concentration plus positive common movement rather than to assign safety to every negative day.
+
+\subsection{Collective phase pressure}
+The normalized shock amplitude is
+\begin{equation}
+A_t=\left(\frac{1}{N}\sum_{i=1}^{N}z_{i,t}^{2}\right)^{1/2}.
+\end{equation}
+CESP defines the instantaneous phase pressure as
+\begin{equation}
+\Psi_t=(1-H_t)\max(S_t,0)A_t.
+\end{equation}
+The three factors have separate interpretations. The first is concentration, the second is directional order, and the third is cross-sectional shock magnitude. The product is high only when collective motion is both concentrated and synchronized.
+
+A smoothed pressure state is computed as
+\begin{equation}
+P_t=\operatorname{EWMA}_{\lambda_P}(\Psi_t),
+\end{equation}
+and its lagged historical percentile is
+\begin{equation}
+Q_t=\operatorname{PercentileRank}_{L_P}(P_{t-1},P_{t-2},\ldots,P_{t-L_P}).
+\end{equation}
+The continuous defensive allocation is
+\begin{equation}
+w_{D,t}=\min\left\{1,\max\left\{0,\frac{Q_t-q_0}{1-q_0}\right\}\right\},\qquad w_{R,t}=1-w_{D,t}.
+\end{equation}
+The empirical parameters are a 63-day volatility span, a 21-day pressure span, a 252-day percentile window, and $q_0=0.70$.
+
+\begin{proposition}[Entropy concentration]
+Holding normalized shock amplitude fixed, a fall in cross-sectional entropy increases CESP phase pressure whenever synchronization is positive.
+\end{proposition}
+
+\begin{proposition}[Collective order]
+Holding entropy and amplitude fixed, an increase in positive sign synchronization increases phase pressure.
+\end{proposition}
+
+\section{Empirical design}
+\subsection{Universe and data}
+Daily adjusted prices were retrieved from Yahoo Finance using \texttt{yfinance} \citep{yfinance}. The sample begins on 2 January 2015 and ends at the latest available observation at retrieval. The risky basket is equal-weighted across SPY, QQQ, IWM, EFA, VNQ, XLE, DBC, BTC-USD, and ETH-USD. The defensive basket is equal-weighted across TLT, IEF, GLD, and UUP.
+
+\begin{table}[H]
+\centering
+\caption{CESP asset universe.}
+\begin{tabular}{ll}
+\toprule
+Basket & Instruments\\
+\midrule
+Risky & SPY, QQQ, IWM, EFA, VNQ, XLE, DBC, BTC-USD, ETH-USD\\
+Defensive & TLT, IEF, GLD, UUP\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The daily portfolio return is
+\begin{equation}
+R^{CESP}_t=(1-w_{D,t-1})R^R_t+w_{D,t-1}R^D_t-c|w_{D,t-1}-w_{D,t-2}|,
+\end{equation}
+where $c$ is a 10-basis-point switch cost, $R^R_t$ is the risky basket return, and $R^D_t$ is the defensive basket return. The one-day lag prevents same-close look-ahead.
+
+\subsection{Baselines and metrics}
+The baseline set includes risky equal-weight buy-and-hold, defensive equal-weight buy-and-hold, static 60/40, a 200-day moving-average mix, a volatility-targeted mix, and a random exposure placebo. Performance is measured with CAGR, annualized volatility, Sharpe ratio, maximum drawdown, Calmar ratio, defensive exposure, and annualized turnover.
+
+\section{Results}
+\subsection{Main comparison}
+The CESP run produced a CAGR of approximately 12.86\%, annualized volatility of 14.66\%, Sharpe ratio of 0.899, and maximum drawdown of -35.33\%. The risky equal-weight basket produced a higher CAGR of 14.41\% but a larger maximum drawdown of -39.59\%. CESP's average defensive exposure was approximately 14.20\%, and its annualized turnover under the stated cost convention was approximately 16.07.
+
+\begin{table}[H]
+\centering
+\caption{Main CESP performance comparison.}
+\scriptsize
+\input{artifacts/cesp_summary.tex}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{cesp_sharpe.png}
+\caption{CESP and baseline Sharpe ratios.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{cesp_equity.png}
+\caption{Cumulative wealth of CESP, risky equal-weight, and defensive equal-weight portfolios.}
+\end{figure}
+
+\subsection{Phase-state behavior}
+Figure~\ref{fig:phase} displays entropy, synchronization, smoothed pressure, its lagged percentile, and the resulting defensive weight. The model's output is continuous rather than a binary switch. This makes the economic interpretation direct: the allocation increases as the market moves toward a high-pressure collective phase and decreases as the historical percentile subsides.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{cesp_phase_state.png}
+\caption{CESP cross-sectional entropy, synchronization, and allocation state.}
+\label{fig:phase}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\linewidth]{cesp_phase_space.png}
+\caption{Phase space of entropy and synchronization colored by pressure.}
+\end{figure}
+
+\subsection{Interpretation}
+CESP improves the maximum drawdown of the risky basket by roughly four percentage points in the realized sample, but it does not improve CAGR. Its Sharpe ratio is below the volatility-targeted mix and slightly below the static 60/40 allocation. It does, however, outperform the random exposure placebo on both CAGR and Sharpe. This pattern is consistent with a model that contains some timing information but pays a meaningful turnover and opportunity-cost penalty when it moves defensively.
+
+The main result is therefore conditional rather than universal. The collective phase variables identify periods of concentrated and synchronized movement, but the optimal response is not necessarily a full shift into the defensive basket. This is an important design implication for future work: the phase signal may be more useful as a risk overlay or position-sizing control than as a stand-alone allocation engine.
+
+\section{Robustness, falsifiability, and limitations}
+The sensitivity grid varies the historical percentile threshold over 0.60, 0.70, and 0.80 and the pressure span over 10, 21, and 42 trading days. It is included with the code and outputs. A successful theory should retain its qualitative behavior over this grid rather than relying on one exact parameter point.
+
+The model remains a research prototype. First, cross-sectional entropy depends on the chosen universe; adding or removing crypto assets changes the reference population. Second, sign synchronization is a coarse statistic and does not replace a full correlation or network model. Third, the use of yfinance adjusted prices and a public data interface introduces revision and availability limitations. Fourth, the study is historical and does not constitute an out-of-sample guarantee. Future work should use a pre-registered train/validation/test split, block bootstrap, alternative universes, and explicit execution slippage.
+
+The theory is falsifiable. If entropy and synchronization do not predict future drawdowns beyond volatility, if the CESP allocation fails to beat matched-exposure placebo controls, or if the effect disappears under modest transaction costs, the collective-phase hypothesis should be rejected or narrowed. The current results warrant further testing but do not justify a universal performance claim.
+
+\section{Conclusion}
+This paper introduced CESP, an independent econophysics model for quantitative finance based on cross-sectional entropy, directional synchronization, and collective phase pressure. Unlike pairwise signed-mass or liquidity-field constructions, CESP treats the market as a population whose collective geometry changes between disordered and ordered phases. A continuous defensive allocation follows from the lagged percentile of the pressure state.
+
+The yfinance experiment shows a mixed outcome. CESP reduces drawdown relative to the risky basket and outperforms a random matched-exposure placebo, but static diversification and volatility targeting remain strong competitors. The result is a useful proof of concept and a clear research agenda: test whether collective phase variables transfer across universes and whether they add value as a risk overlay without incurring excessive turnover.
+
+\appendix
+\section{Reproducibility}
+The accompanying bundle contains the CESP implementation, yfinance data, diagnostics, baseline returns, placebo output, sensitivity grid, figures, LaTeX source, compiled PDF, and runtime logs. The model is fully backward-looking in its signal construction and applies the defensive weight with a one-day execution lag.
+
+\begin{thebibliography}{9}
+\bibitem[Gopikrishnan et~al.(1999)]{gopikrishnan1999} P. Gopikrishnan, V. Plerou, L. A. N. Amaral, M. Meyer, and H. E. Stanley, ``Scaling of the distribution of fluctuations of financial market indices,'' \emph{Physical Review E}, 60, 5305, 1999. \url{https://doi.org/10.1103/PhysRevE.60.5305}.
+\bibitem[Yamasaki et~al.(2005)]{yamasaki2005} K. Yamasaki, L. Muchnik, S. Havlin, A. Bunde, and H. E. Stanley, ``Scaling and memory in volatility return intervals in financial markets,'' \emph{PNAS}, 102(26), 9424--9428, 2005. \url{https://doi.org/10.1073/pnas.0502613102}.
+\bibitem[yfinance documentation(2026)]{yfinance} R. Aroussi, ``yfinance documentation,'' 2026. \url{https://ranaroussi.github.io/yfinance/}.
+\end{thebibliography}
+\end{document}

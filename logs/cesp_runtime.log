@@ -1,0 +1,8 @@
+               strategy     cagr  volatility   sharpe  max_drawdown   calmar  observations  defensive_exposure  turnover
+                   CESP 0.128636    0.146623 0.898955     -0.353281 0.364119          4264            0.142038 16.066402
+      Risk equal-weight 0.144065    0.179738 0.839562     -0.395904 0.363889          4264                 NaN       NaN
+ Defensive equal-weight 0.027470    0.057768 0.497999     -0.189486 0.144970          4264                 NaN       NaN
+                  60_40 0.100748    0.109694 0.930300     -0.250780 0.401739          4264                 NaN       NaN
+             SMA200 mix 0.109442    0.139324 0.815396     -0.355067 0.308229          4264                 NaN       NaN
+       Vol-targeted mix 0.108375    0.106704 1.017925     -0.220918 0.490565          4264                 NaN       NaN
+Random exposure placebo 0.122133    0.169104 0.766949     -0.394028 0.309959          4264                 NaN       NaN

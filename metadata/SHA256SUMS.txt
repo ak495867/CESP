@@ -1,0 +1,3 @@
+43011bcde736fa076fcc8fce3d69242f5b35d027570d2c20b233a33e7f97120d  cesp_research_paper.pdf   #now renamed to CESP.tex
+fce4bb873e539b441e3c6a1405debbb5828d1be3cd23b2ed53256e15462e99e2  cesp_research_paper.tex   #now renamed to CESP.pdf
+63dd0dc7a4444df511c4559b2fdc25e8062d3cab8343e9b0e5935002c9dcda01  cesp_research.py

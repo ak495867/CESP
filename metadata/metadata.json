@@ -1,0 +1,29 @@
+{
+  "risk_assets": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "EFA",
+    "VNQ",
+    "XLE",
+    "DBC",
+    "BTC-USD",
+    "ETH-USD"
+  ],
+  "defensive_assets": [
+    "TLT",
+    "IEF",
+    "GLD",
+    "UUP"
+  ],
+  "config": {
+    "start": "2015-01-02",
+    "end": null,
+    "vol_span": 63,
+    "pressure_span": 21,
+    "percentile_window": 252,
+    "threshold": 0.7,
+    "cost_bps": 10.0
+  },
+  "retrieved_utc": "2026-09-04T17:18:06.977574+00:00"
+}
