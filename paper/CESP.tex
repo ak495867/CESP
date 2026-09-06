@@ -13,7 +13,7 @@
 \begin{abstract}
 This paper introduces the Collective Entropy--Synchronization Phase model (CESP), an independent econophysics framework for quantitative portfolio risk allocation. CESP treats a market as a population of interacting assets and represents its state through two collective observables: the entropy of cross-sectional normalized return activity and the synchronization of asset return signs. A phase-pressure statistic rises when activity becomes concentrated, directional movement becomes aligned, and normalized shock amplitude is large. A continuous defensive allocation is then obtained from the lagged historical percentile of the pressure score. The construction uses collective cross-sectional observables and does not rely on pairwise asset fields or signed-mass analogies.
 
-The model is tested with adjusted daily data retrieved from Yahoo Finance through \texttt{yfinance}. The universe contains US equities, international equity, real estate, energy, commodities, Treasuries, a dollar proxy, and crypto assets. The empirical design compares CESP with equal-weighted risky and defensive baskets, static 60/40, a 200-day moving-average mix, volatility targeting, and a random exposure placebo. Over the realized sample, CESP reduces risk-basket drawdown relative to risky buy-and-hold and outperforms the placebo on Sharpe ratio, but it does not dominate the strongest diversified or volatility-targeted benchmark. The result supports CESP as a transparent and falsifiable collective-state hypothesis, not as a universal claim of alpha.
+The model is tested with adjusted daily data retrieved from Yahoo Finance through \texttt{yfinance}. The universe contains US equities, international equity, real estate, energy, commodities, Treasuries, a dollar proxy, and crypto assets. The empirical design compares CESP with equal-weighted risky and defensive baskets, static 60/40, a 200-day moving-average mix, volatility targeting, and a random exposure placebo. Over the realized sample, CESP reduces drawdown relative to the risky equal-weight basket and outperforms the random exposure placebo on Sharpe ratio, but the volatility-targeted benchmark achieves a higher Sharpe ratio and lower maximum drawdown. The result supports CESP as a transparent and falsifiable collective-state hypothesis, not as a universal claim of alpha.
 \end{abstract}
 \noindent\textbf{Keywords:} econophysics; cross-sectional entropy; synchronization; phase transition; portfolio allocation; quantitative finance; volatility clustering.
 
@@ -112,8 +112,7 @@ The baseline set includes risky equal-weight buy-and-hold, defensive equal-weigh
 
 \section{Results}
 \subsection{Main comparison}
-The CESP run produced a CAGR of approximately 14.66\%, annualized volatility of 12.86\%, Sharpe ratio of 0.899, and maximum drawdown of -35.33\%. The risky equal-weight basket produced a higher CAGR of 14.41\% but a larger maximum drawdown of -39.59\%. CESP's average defensive exposure was approximately 14.20\%, and its annualized turnover under the stated cost convention was approximately 16.07.
-
+The CESP run produced a CAGR of approximately 14.6\%, a Sharpe ratio of 0.973, a maximum drawdown of -35.9\%, and a Calmar ratio of 0.406. The risky equal-weight basket produced a CAGR of 14.4\% but a larger maximum drawdown of -39.6\%. CESP's average defensive exposure was approximately 9.8\%, and its annualized turnover under the stated cost convention was approximately 9.23.
 \begin{table}[H]
 \centering
 \caption{Main CESP performance comparison.}
